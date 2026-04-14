@@ -15,17 +15,36 @@
 </head>
 <body>
     
-    <nav class="fixed w-full z-50 bg-[#FFFEFB]/90 backdrop-blur-md border-b border-yellow-100">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-            <span class="text-2xl font-bold text-stone-900 tracking-tight">Shimatez</span>
-            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
-                <a href="#inicio" class="hover:text-yellow-600 transition">Início</a>
-                <a href="#terapias" class="hover:text-yellow-600 transition">Terapias</a>
-                <a href="sobre.html" class="hover:text-yellow-600 transition">Sobre</a>
-                <a href="loja.html" class="hover:text-yellow-600 transition">Loja</a>
-            </div>
+    <nav class="fixed w-full z-[100] bg-[#FFFEFB]/90 backdrop-blur-md border-b border-yellow-100">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+        <span class="text-2xl font-bold text-stone-900 tracking-tight z-[110]">Shimatez</span>
+        
+        <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
+            <a href="index.html" class="hover:text-yellow-600 transition">Início</a>
+            <a href="#terapias" class="hover:text-yellow-600 transition">Terapias</a>
+            <a href="sobre.html" class="hover:text-yellow-600 transition">Sobre</a>
+            <a href="loja.html" class="hover:text-yellow-600 transition">Loja</a>
         </div>
-    </nav>
+
+        <button id="menu-btn" class="md:hidden text-stone-900 focus:outline-none p-2 z-[110] relative">
+            <svg id="menu-icon" class="w-8 h-8 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path id="menu-path" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <div id="mobile-menu" class="fixed top-0 right-0 h-screen w-[80%] max-w-sm bg-white shadow-2xl z-[105] md:hidden flex flex-col p-10 pt-24 space-y-8 text-right border-l border-yellow-50">
+        <a href="index.html" class="mobile-link text-xl font-serif text-stone-800">Início</a>
+        <a href="#terapias" class="mobile-link text-xl font-serif text-stone-800">Terapias</a>
+        <a href="sobre.html" class="mobile-link text-xl font-serif text-stone-800">Sobre</a>
+        <a href="loja.html" class="mobile-link text-xl font-serif text-stone-800">Loja</a>
+        <div class="pt-20 text-[10px] text-stone-400 uppercase tracking-widest leading-relaxed">
+            Atendimento Baixada Santista<br>Envios para todo o Brasil
+        </div>
+    </div>
+    
+    <div id="menu-backdrop" class="fixed inset-0 bg-stone-900/20 backdrop-blur-sm hidden z-[102]"></div>
+</nav>
 
     <section id="trocas" class="py-24 bg-white">
         <div class="max-w-6xl mx-auto px-6">
@@ -149,5 +168,6 @@
             </div>
         </div>
     </footer>
+    <script src="funcao.js"></script>
 </body>
 </html>
