@@ -5,49 +5,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = document.getElementById('menu-path');
     const links = document.querySelectorAll('.mobile-link');
 
-    // Verifica se os elementos existem na página atual
+    // Se os elementos não existirem, não faz nada (evita erro em outras páginas)
     if (!btn || !menu) return;
 
-    // Função central para FECHAR o menu
-    function closeMenu() {
-        menu.style.transform = "translateX(100%)";
-        if (backdrop) backdrop.classList.add('hidden');
-        if (path) path.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Volta para Hambúrguer
-        document.body.style.overflow = 'auto'; // Libera o scroll
+    // Estado inicial forçado para garantir que o JS saiba onde o menu está
+    menu.style.transform = "translateX(100%)";
+
+    function toggleMenu() {
+        // Verifica se o menu está visível checando o transform
+        const isClosed = menu.style.transform === "translateX(100%)";
+
+        if (isClosed) {
+            // AÇÃO DE ABRIR
+            menu.style.transform = "translateX(0%)";
+            if (backdrop) backdrop.style.display = "block"; 
+            if (path) path.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // Transforma em X
+            document.body.style.overflow = 'hidden'; // Trava a página
+        } else {
+            // AÇÃO DE FECHAR
+            menu.style.transform = "translateX(100%)";
+            if (backdrop) backdrop.style.display = "none";
+            if (path) path.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Volta Hambúrguer
+            document.body.style.overflow = 'auto'; // Libera a página
+        }
     }
 
-    // Função central para ABRIR o menu
-    function openMenu() {
-        menu.style.transform = "translateX(0%)";
-        if (backdrop) backdrop.classList.remove('hidden');
-        if (path) path.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // Transforma em X
-        document.body.style.overflow = 'hidden'; // Trava o scroll
-    }
-
-    // Evento do botão hambúrguer
-    btn.addEventListener('click', (e) => {
+    // Evento do botão principal
+    btn.onclick = (e) => {
         e.preventDefault();
-        const isOpen = menu.style.transform === "translateX(0%)";
-        isOpen ? closeMenu() : openMenu();
-    });
-
-    // FECHAMENTO AUTOMÁTICO: Ao clicar em qualquer link do menu
-    links.forEach(link => {
-        link.addEventListener('click', () => {
-            // Pequeno delay opcional de 100ms para o usuário sentir o clique antes de fechar
-            setTimeout(closeMenu, 100);
-        });
-    });
+        toggleMenu();
+    };
 
     // Fechar ao clicar no fundo escuro
     if (backdrop) {
-        backdrop.addEventListener('click', closeMenu);
+        backdrop.onclick = toggleMenu;
     }
 
-    // Fechar automaticamente se a tela aumentar para desktop
-    window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768) {
-            closeMenu();
-        }
+    // FECHAMENTO AUTOMÁTICO: Ao clicar em qualquer link
+    links.forEach(link => {
+        link.onclick = () => {
+            // Só fecha se estiver aberto
+            if (menu.style.transform === "translateX(0%)") {
+                toggleMenu();
+            }
+        };
     });
 });
