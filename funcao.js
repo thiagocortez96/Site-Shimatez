@@ -5,44 +5,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = document.getElementById('menu-path');
     const links = document.querySelectorAll('.mobile-link');
 
-    // Se o botão não existir nesta página, o script não roda e não dá erro
+    // Verifica se os elementos existem na página atual
     if (!btn || !menu) return;
 
-    let isOpen = false;
-
-    function toggle() {
-        isOpen = !isOpen;
-
-        if (isOpen) {
-            menu.style.transform = "translateX(0%)";
-            backdrop.classList.remove('hidden');
-            path.setAttribute('d', 'M6 18L18 6M6 6l12 12'); 
-            document.body.style.overflow = 'hidden'; 
-        } else {
-            menu.style.transform = "translateX(100%)";
-            backdrop.classList.add('hidden');
-            path.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); 
-            document.body.style.overflow = 'auto'; 
-        }
+    // Função central para FECHAR o menu
+    function closeMenu() {
+        menu.style.transform = "translateX(100%)";
+        if (backdrop) backdrop.classList.add('hidden');
+        if (path) path.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Volta para Hambúrguer
+        document.body.style.overflow = 'auto'; // Libera o scroll
     }
 
+    // Função central para ABRIR o menu
+    function openMenu() {
+        menu.style.transform = "translateX(0%)";
+        if (backdrop) backdrop.classList.remove('hidden');
+        if (path) path.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // Transforma em X
+        document.body.style.overflow = 'hidden'; // Trava o scroll
+    }
+
+    // Evento do botão hambúrguer
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        toggle();
+        const isOpen = menu.style.transform === "translateX(0%)";
+        isOpen ? closeMenu() : openMenu();
     });
 
-    backdrop.addEventListener('click', toggle);
-
+    // FECHAMENTO AUTOMÁTICO: Ao clicar em qualquer link do menu
     links.forEach(link => {
         link.addEventListener('click', () => {
-            if (isOpen) toggle();
+            // Pequeno delay opcional de 100ms para o usuário sentir o clique antes de fechar
+            setTimeout(closeMenu, 100);
         });
     });
 
-    // Garante que o menu feche ao redimensionar a tela
+    // Fechar ao clicar no fundo escuro
+    if (backdrop) {
+        backdrop.addEventListener('click', closeMenu);
+    }
+
+    // Fechar automaticamente se a tela aumentar para desktop
     window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768 && isOpen) {
-            toggle();
+        if (window.innerWidth >= 768) {
+            closeMenu();
         }
     });
 });
