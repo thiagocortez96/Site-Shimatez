@@ -3,63 +3,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu');
     const backdrop = document.getElementById('menu-backdrop');
     const menuPath = document.getElementById('menu-path');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const links = document.querySelectorAll('.mobile-link');
 
-    /**
-     * Alterna o estado do menu (Aberto/Fechado)
-     */
-    function toggleMenu() {
-        const isOpen = mobileMenu.classList.contains('active');
-        
-        if (isOpen) {
-            // Fechar Menu
-            mobileMenu.classList.remove('active');
-            backdrop.classList.add('hidden');
-            
-            // Volta o ícone para Hambúrguer
-            menuPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
-            
-            // Reabilita o scroll da página
-            document.body.style.overflow = 'auto';
+    // Função única para fechar o menu
+    function closeMenu() {
+        mobileMenu.classList.remove('active');
+        backdrop.classList.add('hidden');
+        menuPath.setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+        document.body.style.overflow = 'auto';
+    }
+
+    // Função única para abrir o menu
+    function openMenu() {
+        mobileMenu.classList.add('active');
+        backdrop.classList.remove('hidden');
+        menuPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Evento do botão (Alternar entre abrir e fechar)
+    menuBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (mobileMenu.classList.contains('active')) {
+            closeMenu();
         } else {
-            // Abrir Menu
-            mobileMenu.classList.add('active');
-            backdrop.classList.remove('hidden');
-            
-            // Muda o ícone para "X" (Close)
-            menuPath.setAttribute('d', 'M6 18L18 6M6 6l12 12');
-            
-            // Trava o scroll da página para não rolar o fundo
-            document.body.style.overflow = 'hidden';
+            openMenu();
         }
-    }
-
-    // Evento no botão hambúrguer
-    if (menuBtn) {
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            toggleMenu();
-        });
-    }
-
-    // Fecha ao clicar no fundo (backdrop)
-    if (backdrop) {
-        backdrop.addEventListener('click', toggleMenu);
-    }
-
-    // Fecha o menu automaticamente ao clicar em qualquer link
-    mobileLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (mobileMenu.classList.contains('active')) {
-                toggleMenu();
-            }
-        });
     });
 
-    // Fecha o menu se a janela for redimensionada para Desktop
+    // Fechar ao clicar no fundo escuro
+    backdrop.addEventListener('click', closeMenu);
+
+    // Fechar ao clicar em qualquer link do menu
+    links.forEach(link => {
+        link.addEventListener('click', closeMenu);
+    });
+
+    // Fechar se a tela for redimensionada para desktop
     window.addEventListener('resize', () => {
-        if (window.innerWidth >= 768 && mobileMenu.classList.contains('active')) {
-            toggleMenu();
+        if (window.innerWidth >= 768) {
+            closeMenu();
         }
     });
 });
